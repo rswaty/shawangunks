@@ -1,0 +1,6 @@
+1949,214,255,145,255,Appalachian (Hemlock-)Northern Hardwood Forest
+1948,0,255,220,255,Central Appalachian Dry Oak-Pine Forest
+1952,255,0,77,255,Central Appalachian Pine-Oak Rocky Woodland
+1957,36,255,20,255,Riparian Systems
+1943,76,230,0,255,Northern Hardwoods Forest
+1944,215,185,100,255,Northeastern Interior Dry-Mesic Oak Forest

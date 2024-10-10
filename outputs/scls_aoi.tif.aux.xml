@@ -1,0 +1,206 @@
+<PAMDataset>
+  <PAMRasterBand band="1">
+    <Description>VALUE</Description>
+    <GDALRasterAttributeTable tableType="thematic">
+      <FieldDefn index="0">
+        <Name>VALUE</Name>
+        <Type>0</Type>
+        <Usage>0</Usage>
+      </FieldDefn>
+      <FieldDefn index="1">
+        <Name>LABEL</Name>
+        <Type>2</Type>
+        <Usage>0</Usage>
+      </FieldDefn>
+      <FieldDefn index="2">
+        <Name>DESCRIPTION</Name>
+        <Type>2</Type>
+        <Usage>0</Usage>
+      </FieldDefn>
+      <FieldDefn index="3">
+        <Name>R</Name>
+        <Type>0</Type>
+        <Usage>0</Usage>
+      </FieldDefn>
+      <FieldDefn index="4">
+        <Name>G</Name>
+        <Type>0</Type>
+        <Usage>0</Usage>
+      </FieldDefn>
+      <FieldDefn index="5">
+        <Name>B</Name>
+        <Type>0</Type>
+        <Usage>0</Usage>
+      </FieldDefn>
+      <FieldDefn index="6">
+        <Name>RED</Name>
+        <Type>1</Type>
+        <Usage>0</Usage>
+      </FieldDefn>
+      <FieldDefn index="7">
+        <Name>GREEN</Name>
+        <Type>1</Type>
+        <Usage>0</Usage>
+      </FieldDefn>
+      <FieldDefn index="8">
+        <Name>BLUE</Name>
+        <Type>1</Type>
+        <Usage>0</Usage>
+      </FieldDefn>
+      <Row index="0">
+        <F>-9999</F>
+        <F>Fill-NoData</F>
+        <F>Fill-NoData</F>
+        <F>255</F>
+        <F>255</F>
+        <F>255</F>
+        <F>1</F>
+        <F>1</F>
+        <F>1</F>
+      </Row>
+      <Row index="1">
+        <F>-1111</F>
+        <F>Fill-Not Mapped</F>
+        <F>Fill-Not Mapped</F>
+        <F>111</F>
+        <F>111</F>
+        <F>111</F>
+        <F>0.435294</F>
+        <F>0.435294</F>
+        <F>0.435294</F>
+      </Row>
+      <Row index="2">
+        <F>1</F>
+        <F>A</F>
+        <F>Succession Class A</F>
+        <F>161</F>
+        <F>99</F>
+        <F>51</F>
+        <F>0.631373</F>
+        <F>0.388235</F>
+        <F>0.2</F>
+      </Row>
+      <Row index="3">
+        <F>2</F>
+        <F>B</F>
+        <F>Succession Class B</F>
+        <F>56</F>
+        <F>168</F>
+        <F>0</F>
+        <F>0.219608</F>
+        <F>0.658824</F>
+        <F>0</F>
+      </Row>
+      <Row index="4">
+        <F>3</F>
+        <F>C</F>
+        <F>Succession Class C</F>
+        <F>201</F>
+        <F>222</F>
+        <F>171</F>
+        <F>0.788235</F>
+        <F>0.870588</F>
+        <F>0.670588</F>
+      </Row>
+      <Row index="5">
+        <F>4</F>
+        <F>D</F>
+        <F>Succession Class D</F>
+        <F>255</F>
+        <F>248</F>
+        <F>166</F>
+        <F>1</F>
+        <F>0.972549</F>
+        <F>0.65098</F>
+      </Row>
+      <Row index="6">
+        <F>5</F>
+        <F>E</F>
+        <F>Succession Class E</F>
+        <F>0</F>
+        <F>74</F>
+        <F>77</F>
+        <F>0</F>
+        <F>0.290196</F>
+        <F>0.301961</F>
+      </Row>
+      <Row index="7">
+        <F>6</F>
+        <F>UN</F>
+        <F>Uncharacteristic Native Vegetation Cover/Structure/Composition</F>
+        <F>160</F>
+        <F>0</F>
+        <F>0</F>
+        <F>0.627451</F>
+        <F>0</F>
+        <F>0</F>
+      </Row>
+      <Row index="8">
+        <F>7</F>
+        <F>UE</F>
+        <F>Uncharacteristic Exotic Vegetation</F>
+        <F>255</F>
+        <F>0</F>
+        <F>0</F>
+        <F>1</F>
+        <F>0</F>
+        <F>0</F>
+      </Row>
+      <Row index="9">
+        <F>111</F>
+        <F>Water</F>
+        <F>Water</F>
+        <F>0</F>
+        <F>0</F>
+        <F>255</F>
+        <F>0</F>
+        <F>0</F>
+        <F>1</F>
+      </Row>
+      <Row index="10">
+        <F>112</F>
+        <F>Snow/Ice</F>
+        <F>Snow/Ice</F>
+        <F>159</F>
+        <F>161</F>
+        <F>240</F>
+        <F>0.623529</F>
+        <F>0.631373</F>
+        <F>0.941176</F>
+      </Row>
+      <Row index="11">
+        <F>120</F>
+        <F>Developed</F>
+        <F>Developed</F>
+        <F>132</F>
+        <F>0</F>
+        <F>138</F>
+        <F>0.517647</F>
+        <F>0</F>
+        <F>0.541176</F>
+      </Row>
+      <Row index="12">
+        <F>132</F>
+        <F>Barren or Sparse</F>
+        <F>Barren or Sparse</F>
+        <F>191</F>
+        <F>191</F>
+        <F>191</F>
+        <F>0.74902</F>
+        <F>0.74902</F>
+        <F>0.74902</F>
+      </Row>
+      <Row index="13">
+        <F>180</F>
+        <F>Agriculture</F>
+        <F>Agriculture</F>
+        <F>223</F>
+        <F>115</F>
+        <F>255</F>
+        <F>0.87451</F>
+        <F>0.45098</F>
+        <F>1</F>
+      </Row>
+    </GDALRasterAttributeTable>
+  </PAMRasterBand>
+</PAMDataset>

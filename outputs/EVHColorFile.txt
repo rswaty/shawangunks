@@ -1,0 +1,50 @@
+11,215,237,247,255,Open Water
+13,145,186,136,255,Developed-Upland Deciduous Forest
+14,106,141,121,255,Developed-Upland Evergreen Forest
+15,84,112,99,255,Developed-Upland Mixed Forest
+16,116,155,148,255,Developed-Upland Herbaceous
+17,187,174,140,255,Developed-Upland Shrubland
+22,153,153,153,255,Developed - Low Intensity
+23,102,102,102,255,Developed - Medium Intensity
+24,51,51,51,255,Developed - High Intensity
+25,0,0,0,255,Developed-Roads
+63,214,210,77,255,NASS-Row Crop-Close Grown Crop
+64,214,210,77,255,NASS-Row Crop
+65,214,210,77,255,NASS-Close Grown Crop
+101,228,239,224,255,Tree Height = 1 meter
+102,225,237,220,255,Tree Height = 2 meters
+103,221,235,216,255,Tree Height = 3 meters
+104,218,233,212,255,Tree Height = 4 meters
+105,214,231,207,255,Tree Height = 5 meters
+106,206,227,198,255,Tree Height = 6 meters
+107,198,223,188,255,Tree Height = 7 meters
+108,189,218,179,255,Tree Height = 8 meters
+109,181,214,169,255,Tree Height = 9 meters
+110,173,210,160,255,Tree Height = 10 meters
+111,165,206,152,255,Tree Height = 11 meters
+112,156,201,143,255,Tree Height = 12 meters
+113,148,197,135,255,Tree Height = 13 meters
+114,140,194,126,255,Tree Height = 14 meters
+115,132,190,117,255,Tree Height = 15 meters
+116,124,187,108,255,Tree Height = 16 meters
+117,115,183,99,255,Tree Height = 17 meters
+118,106,180,91,255,Tree Height = 18 meters
+119,97,177,84,255,Tree Height = 19 meters
+120,87,174,77,255,Tree Height = 20 meters
+121,78,171,70,255,Tree Height = 21 meters
+122,71,164,64,255,Tree Height = 22 meters
+123,66,154,60,255,Tree Height = 23 meters
+124,62,143,56,255,Tree Height = 24 meters
+125,58,133,52,255,Tree Height = 25 meters
+126,50,126,51,255,Tree Height = 26 meters
+127,36,122,53,255,Tree Height = 27 meters
+222,104,68,46,255,Shrub Height = 2.2 meters
+223,95,59,36,255,Shrub Height = 2.3 meters
+224,89,55,34,255,Shrub Height = 2.4 meters
+225,82,51,31,255,Shrub Height = 2.5 meters
+226,75,47,29,255,Shrub Height = 2.6 meters
+229,56,34,21,255,Shrub Height = 2.9 meters
+230,49,30,19,255,Shrub Height >= 3.0 meters
+301,204,230,225,255,Herb Height = 0.1 meter
+303,136,197,185,255,Herb Height = 0.3 meter
+310,0,80,88,255,Herb Height >= 1 meter

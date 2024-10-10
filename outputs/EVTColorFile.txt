@@ -1,0 +1,10 @@
+7303,85,187,194,255,Northeastern Interior Dry-Mesic Oak Forest
+7370,0,38,115,255,Appalachian Hemlock Forest
+7377,13,69,133,255,Central Appalachian Pine Rocky Woodland
+7463,13,69,133,255,Central Appalachian Dry Oak Forest
+7502,13,69,133,255,Central Appalachian Dry Oak-Pine Forest
+7511,0,38,115,255,Appalachian Northern Hardwood Forest
+7512,0,38,115,255,Appalachian (Hemlock)-Northern Hardwood Forest
+7556,13,69,133,255,Central Appalachian Oak Rocky Woodland
+7557,13,69,133,255,Central Appalachian Pine-Oak Rocky Woodland
+9177,0,92,0,255,North-Central Interior and Appalachian Acidic Peatland Woodland

@@ -1,0 +1,36 @@
+label,colors,,R,G,B
+Tree Cover = 0-9%,#E4EFE0,,228,239,224
+Tree Cover = 10-19%,#CFE3C7,,207,227,199
+Tree Cover = 20-29%,#A6CF9A,,166,207,154
+Tree Cover = 30-39%,#83BE73,,131,190,115
+Tree Cover = 40-49%,#57AE4C,,87,174,76
+Tree Cover = 50-59%,#3A8635,,58,134,53
+Tree Cover = 60-69%,#016F3B,,1,111,59
+Tree Cover = 70-79%,#1D5524,,29,85,36
+Tree Cover = 80-89%,#004927,,0,73,39
+Tree Cover = 90-100%,#00381E,,0,56,30
+Shrub Cover = 0-9%,#EFE4CC,,239,228,204
+Shrub Cover = 10-19%,#E8D9B7,,232,217,183
+Shrub Cover = 20-29%,#DFCEA1,,223,206,161
+Shrub Cover = 30-39%,#C4B283,,196,178,131
+Shrub Cover = 40-49%,#8F785D,,143,120,93
+Shrub Cover = 50-59%,#69452F,,105,69,47
+Shrub Cover = 60-69%,#4A2E1D,,74,46,29
+Shrub Cover = 70-79%,#311E13,,49,30,19
+Shrub Cover = 80-89%,#1F140D,,31,20,13
+Shrub Cover = 90-100%,#1F140D,,31,20,13
+Herb Cover = 10-19%,#ADD7CF,,173,215,207
+Herb Cover = 20-29%,#8BC6BB,,139,198,187
+Herb Cover = 30-39%,#68B5A6,,104,181,166
+Herb Cover = 40-49%,#46A492,,70,164,146
+Herb Cover = 50-59%,#24937E,,36,147,126
+Herb Cover = 60-69%,#01836A,,1,131,106
+Herb Cover = 70-79%,#007B7A,,0,123,122
+Herb Cover = 80-89%,#006B75,,0,107,117
+Herb Cover = 90-100%,#005058,,0,80,88
+Open Water,#F5F5F5,,245,245,245
+Developed,#948E8E,,148,142,142
+Agriculture,#D6D24D,,214,210,77
+Sparse Vegetation,#7E6A80,,126,106,128
+Barren,#C0B4B0,,192,180,176
+Quarries,#CCCCCC,,204,204,204

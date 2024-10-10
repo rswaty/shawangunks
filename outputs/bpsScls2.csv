@@ -1,0 +1,121 @@
+"","model_label","model_code","ref_label","ref_percent","bps_name","Var1","Var2","Freq","BPS_CODE","ZONE","total_count","currentPercent"
+"1","13020_64_A","13020_64","A",2,"Laurentian-Acadian Northern Hardwoods Forest",NA,NA,NA,NA,NA,NA,NA
+"2","13020_64_B","13020_64","B",4,"Laurentian-Acadian Northern Hardwoods Forest",1943,2,23,13020,64,2661,0
+"3","13020_64_C","13020_64","C",14,"Laurentian-Acadian Northern Hardwoods Forest",1943,3,996,13020,64,2661,37
+"4","13020_64_D","13020_64","D",76,"Laurentian-Acadian Northern Hardwoods Forest",1943,4,47,13020,64,2661,1
+"5","13020_64_E","13020_64","E",4,"Laurentian-Acadian Northern Hardwoods Forest",1943,5,1251,13020,64,2661,47
+"6","13020_64_Agriculture","13020_64","Agriculture",0,"Laurentian-Acadian Northern Hardwoods Forest",1943,180,5,13020,64,2661,0
+"7","13020_64_Developed","13020_64","Developed",0,"Laurentian-Acadian Northern Hardwoods Forest",1943,120,83,13020,64,2661,3
+"8","13020_64_Water","13020_64","Water",0,"Laurentian-Acadian Northern Hardwoods Forest",NA,NA,NA,NA,NA,NA,NA
+"9","13020_64_UN","13020_64","UN",0,"Laurentian-Acadian Northern Hardwoods Forest",1943,6,211,13020,64,2661,7
+"10","13020_64_UE","13020_64","UE",0,"Laurentian-Acadian Northern Hardwoods Forest",1943,7,45,13020,64,2661,1
+"11","13030_61_63_64_65_66_A","13030_61_63_64_65_66","A",4,"Northeastern Interior Dry-Mesic Oak Forest",NA,NA,NA,NA,NA,NA,NA
+"12","13030_61_63_64_65_66_B","13030_61_63_64_65_66","B",22,"Northeastern Interior Dry-Mesic Oak Forest",NA,NA,NA,NA,NA,NA,NA
+"13","13030_61_63_64_65_66_C","13030_61_63_64_65_66","C",49,"Northeastern Interior Dry-Mesic Oak Forest",1944,3,96,13030,64,1485,6
+"14","13030_61_63_64_65_66_D","13030_61_63_64_65_66","D",18,"Northeastern Interior Dry-Mesic Oak Forest",1944,4,1176,13030,64,1485,79
+"15","13030_61_63_64_65_66_E","13030_61_63_64_65_66","E",7,"Northeastern Interior Dry-Mesic Oak Forest",1944,5,199,13030,64,1485,13
+"16","13030_61_63_64_65_66_Agriculture","13030_61_63_64_65_66","Agriculture",0,"Northeastern Interior Dry-Mesic Oak Forest",NA,NA,NA,NA,NA,NA,NA
+"17","13030_61_63_64_65_66_Developed","13030_61_63_64_65_66","Developed",0,"Northeastern Interior Dry-Mesic Oak Forest",1944,120,11,13030,64,1485,0
+"18","13030_61_63_64_65_66_Water","13030_61_63_64_65_66","Water",0,"Northeastern Interior Dry-Mesic Oak Forest",NA,NA,NA,NA,NA,NA,NA
+"19","13030_61_63_64_65_66_UN","13030_61_63_64_65_66","UN",0,"Northeastern Interior Dry-Mesic Oak Forest",NA,NA,NA,NA,NA,NA,NA
+"20","13030_61_63_64_65_66_UE","13030_61_63_64_65_66","UE",0,"Northeastern Interior Dry-Mesic Oak Forest",1944,7,3,13030,64,1485,0
+"21","13660_51_63_64_65_66_A","13660_51_63_64_65_66","A",3,"Laurentian-Acadian Pine-Hemlock-Hardwood Forest",1947,1,15,13660,64,511,2
+"22","13660_51_63_64_65_66_B","13660_51_63_64_65_66","B",16,"Laurentian-Acadian Pine-Hemlock-Hardwood Forest",1947,2,7,13660,64,511,1
+"23","13660_51_63_64_65_66_C","13660_51_63_64_65_66","C",39,"Laurentian-Acadian Pine-Hemlock-Hardwood Forest",NA,NA,NA,NA,NA,NA,NA
+"24","13660_51_63_64_65_66_D","13660_51_63_64_65_66","D",42,"Laurentian-Acadian Pine-Hemlock-Hardwood Forest",1947,4,454,13660,64,511,88
+"25","13660_51_63_64_65_66_E","13660_51_63_64_65_66","E",NA,"Laurentian-Acadian Pine-Hemlock-Hardwood Forest",NA,NA,NA,NA,NA,NA,NA
+"26","13660_51_63_64_65_66_Agriculture","13660_51_63_64_65_66","Agriculture",0,"Laurentian-Acadian Pine-Hemlock-Hardwood Forest",1947,180,1,13660,64,511,0
+"27","13660_51_63_64_65_66_Developed","13660_51_63_64_65_66","Developed",0,"Laurentian-Acadian Pine-Hemlock-Hardwood Forest",1947,120,28,13660,64,511,5
+"28","13660_51_63_64_65_66_Water","13660_51_63_64_65_66","Water",0,"Laurentian-Acadian Pine-Hemlock-Hardwood Forest",NA,NA,NA,NA,NA,NA,NA
+"29","13660_51_63_64_65_66_UN","13660_51_63_64_65_66","UN",0,"Laurentian-Acadian Pine-Hemlock-Hardwood Forest",NA,NA,NA,NA,NA,NA,NA
+"30","13660_51_63_64_65_66_UE","13660_51_63_64_65_66","UE",0,"Laurentian-Acadian Pine-Hemlock-Hardwood Forest",1947,7,6,13660,64,511,1
+"31","13690_60_61_63_64_65_66_A","13690_60_61_63_64_65_66","A",11,"Central Appalachian Dry Oak-Pine Forest",1948,1,441,13690,64,42052,1
+"32","13690_60_61_63_64_65_66_B","13690_60_61_63_64_65_66","B",15,"Central Appalachian Dry Oak-Pine Forest",1948,2,15668,13690,64,42052,37
+"33","13690_60_61_63_64_65_66_C","13690_60_61_63_64_65_66","C",12,"Central Appalachian Dry Oak-Pine Forest",1948,3,24742,13690,64,42052,58
+"34","13690_60_61_63_64_65_66_D","13690_60_61_63_64_65_66","D",42,"Central Appalachian Dry Oak-Pine Forest",1948,4,6,13690,64,42052,0
+"35","13690_60_61_63_64_65_66_E","13690_60_61_63_64_65_66","E",20,"Central Appalachian Dry Oak-Pine Forest",1948,5,127,13690,64,42052,0
+"36","13690_60_61_63_64_65_66_Agriculture","13690_60_61_63_64_65_66","Agriculture",0,"Central Appalachian Dry Oak-Pine Forest",1948,180,51,13690,64,42052,0
+"37","13690_60_61_63_64_65_66_Developed","13690_60_61_63_64_65_66","Developed",0,"Central Appalachian Dry Oak-Pine Forest",1948,120,480,13690,64,42052,1
+"38","13690_60_61_63_64_65_66_Water","13690_60_61_63_64_65_66","Water",0,"Central Appalachian Dry Oak-Pine Forest",NA,NA,NA,NA,NA,NA,NA
+"39","13690_60_61_63_64_65_66_UN","13690_60_61_63_64_65_66","UN",0,"Central Appalachian Dry Oak-Pine Forest",1948,6,49,13690,64,42052,0
+"40","13690_60_61_63_64_65_66_UE","13690_60_61_63_64_65_66","UE",0,"Central Appalachian Dry Oak-Pine Forest",1948,7,488,13690,64,42052,1
+"41","13700_60_63_64_65_66_A","13700_60_63_64_65_66","A",9,"Appalachian (Hemlock-)Northern Hardwood Forest",1949,1,5,13700,64,11245,0
+"42","13700_60_63_64_65_66_B","13700_60_63_64_65_66","B",14,"Appalachian (Hemlock-)Northern Hardwood Forest",1949,2,8939,13700,64,11245,79
+"43","13700_60_63_64_65_66_C","13700_60_63_64_65_66","C",9,"Appalachian (Hemlock-)Northern Hardwood Forest",1949,3,1715,13700,64,11245,15
+"44","13700_60_63_64_65_66_D","13700_60_63_64_65_66","D",68,"Appalachian (Hemlock-)Northern Hardwood Forest",1949,4,72,13700,64,11245,0
+"45","13700_60_63_64_65_66_E","13700_60_63_64_65_66","E",NA,"Appalachian (Hemlock-)Northern Hardwood Forest",NA,NA,NA,NA,NA,NA,NA
+"46","13700_60_63_64_65_66_Agriculture","13700_60_63_64_65_66","Agriculture",0,"Appalachian (Hemlock-)Northern Hardwood Forest",1949,180,11,13700,64,11245,0
+"47","13700_60_63_64_65_66_Developed","13700_60_63_64_65_66","Developed",0,"Appalachian (Hemlock-)Northern Hardwood Forest",1949,120,329,13700,64,11245,2
+"48","13700_60_63_64_65_66_Water","13700_60_63_64_65_66","Water",0,"Appalachian (Hemlock-)Northern Hardwood Forest",NA,NA,NA,NA,NA,NA,NA
+"49","13700_60_63_64_65_66_UN","13700_60_63_64_65_66","UN",0,"Appalachian (Hemlock-)Northern Hardwood Forest",1949,6,11,13700,64,11245,0
+"50","13700_60_63_64_65_66_UE","13700_60_63_64_65_66","UE",0,"Appalachian (Hemlock-)Northern Hardwood Forest",1949,7,163,13700,64,11245,1
+"51","13770_60_61_63_64_65_66_A","13770_60_61_63_64_65_66","A",3,"Central Appalachian Pine-Oak Rocky Woodland",NA,NA,NA,NA,NA,NA,NA
+"52","13770_60_61_63_64_65_66_B","13770_60_61_63_64_65_66","B",7,"Central Appalachian Pine-Oak Rocky Woodland",1952,2,509,13770,64,45171,1
+"53","13770_60_61_63_64_65_66_C","13770_60_61_63_64_65_66","C",74,"Central Appalachian Pine-Oak Rocky Woodland",1952,3,35321,13770,64,45171,78
+"54","13770_60_61_63_64_65_66_D","13770_60_61_63_64_65_66","D",16,"Central Appalachian Pine-Oak Rocky Woodland",1952,4,1164,13770,64,45171,2
+"55","13770_60_61_63_64_65_66_E","13770_60_61_63_64_65_66","E",NA,"Central Appalachian Pine-Oak Rocky Woodland",NA,NA,NA,NA,NA,NA,NA
+"56","13770_60_61_63_64_65_66_Agriculture","13770_60_61_63_64_65_66","Agriculture",0,"Central Appalachian Pine-Oak Rocky Woodland",1952,180,92,13770,64,45171,0
+"57","13770_60_61_63_64_65_66_Developed","13770_60_61_63_64_65_66","Developed",0,"Central Appalachian Pine-Oak Rocky Woodland",1952,120,306,13770,64,45171,0
+"58","13770_60_61_63_64_65_66_Water","13770_60_61_63_64_65_66","Water",0,"Central Appalachian Pine-Oak Rocky Woodland",NA,NA,NA,NA,NA,NA,NA
+"59","13770_60_61_63_64_65_66_UN","13770_60_61_63_64_65_66","UN",0,"Central Appalachian Pine-Oak Rocky Woodland",1952,6,7356,13770,64,45171,16
+"60","13770_60_61_63_64_65_66_UE","13770_60_61_63_64_65_66","UE",0,"Central Appalachian Pine-Oak Rocky Woodland",1952,7,423,13770,64,45171,0
+"61","14710_64_65_A","14710_64_65","A",9,"Central Interior and Appalachian Floodplain Systems",NA,NA,NA,NA,NA,NA,NA
+"62","14710_64_65_B","14710_64_65","B",25,"Central Interior and Appalachian Floodplain Systems",1956,2,2,14710,64,124,1
+"63","14710_64_65_C","14710_64_65","C",6,"Central Interior and Appalachian Floodplain Systems",1956,3,81,14710,64,124,65
+"64","14710_64_65_D","14710_64_65","D",13,"Central Interior and Appalachian Floodplain Systems",NA,NA,NA,NA,NA,NA,NA
+"65","14710_64_65_E","14710_64_65","E",47,"Central Interior and Appalachian Floodplain Systems",NA,NA,NA,NA,NA,NA,NA
+"66","14710_64_65_Agriculture","14710_64_65","Agriculture",0,"Central Interior and Appalachian Floodplain Systems",NA,NA,NA,NA,NA,NA,NA
+"67","14710_64_65_Developed","14710_64_65","Developed",0,"Central Interior and Appalachian Floodplain Systems",NA,NA,NA,NA,NA,NA,NA
+"68","14710_64_65_Water","14710_64_65","Water",0,"Central Interior and Appalachian Floodplain Systems",NA,NA,NA,NA,NA,NA,NA
+"69","14710_64_65_UN","14710_64_65","UN",0,"Central Interior and Appalachian Floodplain Systems",1956,6,8,14710,64,124,6
+"70","14710_64_65_UE","14710_64_65","UE",0,"Central Interior and Appalachian Floodplain Systems",1956,7,33,14710,64,124,26
+"71","14720_64_65_66_A","14720_64_65_66","A",16,"Central Interior and Appalachian Riparian Systems",1957,1,63,14720,64,3976,1
+"72","14720_64_65_66_B","14720_64_65_66","B",22,"Central Interior and Appalachian Riparian Systems",1957,2,3091,14720,64,3976,77
+"73","14720_64_65_66_C","14720_64_65_66","C",13,"Central Interior and Appalachian Riparian Systems",1957,3,695,14720,64,3976,17
+"74","14720_64_65_66_D","14720_64_65_66","D",40,"Central Interior and Appalachian Riparian Systems",NA,NA,NA,NA,NA,NA,NA
+"75","14720_64_65_66_E","14720_64_65_66","E",9,"Central Interior and Appalachian Riparian Systems",1957,5,14,14720,64,3976,0
+"76","14720_64_65_66_Agriculture","14720_64_65_66","Agriculture",0,"Central Interior and Appalachian Riparian Systems",1957,180,6,14720,64,3976,0
+"77","14720_64_65_66_Developed","14720_64_65_66","Developed",0,"Central Interior and Appalachian Riparian Systems",1957,120,58,14720,64,3976,1
+"78","14720_64_65_66_Water","14720_64_65_66","Water",0,"Central Interior and Appalachian Riparian Systems",NA,NA,NA,NA,NA,NA,NA
+"79","14720_64_65_66_UN","14720_64_65_66","UN",0,"Central Interior and Appalachian Riparian Systems",NA,NA,NA,NA,NA,NA,NA
+"80","14720_64_65_66_UE","14720_64_65_66","UE",0,"Central Interior and Appalachian Riparian Systems",1957,7,49,14720,64,3976,1
+"81","14750_41_50_51_63_64_65_66_A","14750_41_50_51_63_64_65_66","A",16,"Laurentian-Acadian Floodplain Systems",NA,NA,NA,NA,NA,NA,NA
+"82","14750_41_50_51_63_64_65_66_B","14750_41_50_51_63_64_65_66","B",23,"Laurentian-Acadian Floodplain Systems",NA,NA,NA,NA,NA,NA,NA
+"83","14750_41_50_51_63_64_65_66_C","14750_41_50_51_63_64_65_66","C",44,"Laurentian-Acadian Floodplain Systems",1958,3,1,14750,64,1,100
+"84","14750_41_50_51_63_64_65_66_D","14750_41_50_51_63_64_65_66","D",17,"Laurentian-Acadian Floodplain Systems",NA,NA,NA,NA,NA,NA,NA
+"85","14750_41_50_51_63_64_65_66_E","14750_41_50_51_63_64_65_66","E",NA,"Laurentian-Acadian Floodplain Systems",NA,NA,NA,NA,NA,NA,NA
+"86","14750_41_50_51_63_64_65_66_Agriculture","14750_41_50_51_63_64_65_66","Agriculture",0,"Laurentian-Acadian Floodplain Systems",NA,NA,NA,NA,NA,NA,NA
+"87","14750_41_50_51_63_64_65_66_Developed","14750_41_50_51_63_64_65_66","Developed",0,"Laurentian-Acadian Floodplain Systems",NA,NA,NA,NA,NA,NA,NA
+"88","14750_41_50_51_63_64_65_66_Water","14750_41_50_51_63_64_65_66","Water",0,"Laurentian-Acadian Floodplain Systems",NA,NA,NA,NA,NA,NA,NA
+"89","14750_41_50_51_63_64_65_66_UN","14750_41_50_51_63_64_65_66","UN",0,"Laurentian-Acadian Floodplain Systems",NA,NA,NA,NA,NA,NA,NA
+"90","14750_41_50_51_63_64_65_66_UE","14750_41_50_51_63_64_65_66","UE",0,"Laurentian-Acadian Floodplain Systems",NA,NA,NA,NA,NA,NA,NA
+"91","14790_60_61_63_64_65_66_A","14790_60_61_63_64_65_66","A",24,"Central Interior and Appalachian Swamp Systems",NA,NA,NA,NA,NA,NA,NA
+"92","14790_60_61_63_64_65_66_B","14790_60_61_63_64_65_66","B",36,"Central Interior and Appalachian Swamp Systems",1960,2,18,14790,64,505,3
+"93","14790_60_61_63_64_65_66_C","14790_60_61_63_64_65_66","C",40,"Central Interior and Appalachian Swamp Systems",1960,3,440,14790,64,505,87
+"94","14790_60_61_63_64_65_66_D","14790_60_61_63_64_65_66","D",NA,"Central Interior and Appalachian Swamp Systems",NA,NA,NA,NA,NA,NA,NA
+"95","14790_60_61_63_64_65_66_E","14790_60_61_63_64_65_66","E",NA,"Central Interior and Appalachian Swamp Systems",NA,NA,NA,NA,NA,NA,NA
+"96","14790_60_61_63_64_65_66_Agriculture","14790_60_61_63_64_65_66","Agriculture",0,"Central Interior and Appalachian Swamp Systems",1960,180,2,14790,64,505,0
+"97","14790_60_61_63_64_65_66_Developed","14790_60_61_63_64_65_66","Developed",0,"Central Interior and Appalachian Swamp Systems",1960,120,9,14790,64,505,1
+"98","14790_60_61_63_64_65_66_Water","14790_60_61_63_64_65_66","Water",0,"Central Interior and Appalachian Swamp Systems",NA,NA,NA,NA,NA,NA,NA
+"99","14790_60_61_63_64_65_66_UN","14790_60_61_63_64_65_66","UN",0,"Central Interior and Appalachian Swamp Systems",1960,6,1,14790,64,505,0
+"100","14790_60_61_63_64_65_66_UE","14790_60_61_63_64_65_66","UE",0,"Central Interior and Appalachian Swamp Systems",1960,7,35,14790,64,505,6
+"101","14940_64_A","14940_64","A",47,"Laurentian-Acadian Shrub-Herbaceous Wetland Systems",NA,NA,NA,NA,NA,NA,NA
+"102","14940_64_B","14940_64","B",29,"Laurentian-Acadian Shrub-Herbaceous Wetland Systems",NA,NA,NA,NA,NA,NA,NA
+"103","14940_64_C","14940_64","C",11,"Laurentian-Acadian Shrub-Herbaceous Wetland Systems",NA,NA,NA,NA,NA,NA,NA
+"104","14940_64_D","14940_64","D",13,"Laurentian-Acadian Shrub-Herbaceous Wetland Systems",1962,4,7,14940,64,8,87
+"105","14940_64_E","14940_64","E",NA,"Laurentian-Acadian Shrub-Herbaceous Wetland Systems",NA,NA,NA,NA,NA,NA,NA
+"106","14940_64_Agriculture","14940_64","Agriculture",0,"Laurentian-Acadian Shrub-Herbaceous Wetland Systems",1962,180,1,14940,64,8,12
+"107","14940_64_Developed","14940_64","Developed",0,"Laurentian-Acadian Shrub-Herbaceous Wetland Systems",NA,NA,NA,NA,NA,NA,NA
+"108","14940_64_Water","14940_64","Water",0,"Laurentian-Acadian Shrub-Herbaceous Wetland Systems",NA,NA,NA,NA,NA,NA,NA
+"109","14940_64_UN","14940_64","UN",0,"Laurentian-Acadian Shrub-Herbaceous Wetland Systems",NA,NA,NA,NA,NA,NA,NA
+"110","14940_64_UE","14940_64","UE",0,"Laurentian-Acadian Shrub-Herbaceous Wetland Systems",NA,NA,NA,NA,NA,NA,NA
+"111","15260_64_65_66_A","15260_64_65_66","A",14,"Laurentian-Acadian Swamp Systems",NA,NA,NA,NA,NA,NA,NA
+"112","15260_64_65_66_B","15260_64_65_66","B",11,"Laurentian-Acadian Swamp Systems",1964,2,2,15260,64,101,1
+"113","15260_64_65_66_C","15260_64_65_66","C",21,"Laurentian-Acadian Swamp Systems",1964,3,54,15260,64,101,53
+"114","15260_64_65_66_D","15260_64_65_66","D",54,"Laurentian-Acadian Swamp Systems",NA,NA,NA,NA,NA,NA,NA
+"115","15260_64_65_66_E","15260_64_65_66","E",NA,"Laurentian-Acadian Swamp Systems",NA,NA,NA,NA,NA,NA,NA
+"116","15260_64_65_66_Agriculture","15260_64_65_66","Agriculture",0,"Laurentian-Acadian Swamp Systems",1964,180,1,15260,64,101,0
+"117","15260_64_65_66_Developed","15260_64_65_66","Developed",0,"Laurentian-Acadian Swamp Systems",1964,120,2,15260,64,101,1
+"118","15260_64_65_66_Water","15260_64_65_66","Water",0,"Laurentian-Acadian Swamp Systems",NA,NA,NA,NA,NA,NA,NA
+"119","15260_64_65_66_UN","15260_64_65_66","UN",0,"Laurentian-Acadian Swamp Systems",1964,6,42,15260,64,101,41
+"120","15260_64_65_66_UE","15260_64_65_66","UE",0,"Laurentian-Acadian Swamp Systems",NA,NA,NA,NA,NA,NA,NA

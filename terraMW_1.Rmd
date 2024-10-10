@@ -1,0 +1,1102 @@
+---
+title: "terraForMW1"
+author: "Randy Swaty"
+date: "2022-11-11"
+output: html_document
+---
+
+
+
+## Packages, set name variable (set for each landscape)
+
+
+```{r libraries, message=FALSE, warning=FALSE, include=FALSE}
+
+library(foreign)
+library(raster)
+library(rlandfire)
+library(scales)
+library(sf)
+library(terra)
+library(tidyverse)
+library(tools)
+library(varhandle)
+
+landscape_name <- "Shawangunks"
+```
+
+
+## Read in shapefile
+
+```{r read shapefile, message=FALSE, warning=FALSE, include=FALSE}
+#  read shape
+shp <- st_read("inputs/minnewaska_state_park.shp") %>% 
+  st_transform(crs = 5070) %>%
+  st_union() %>%
+  st_sf()
+
+vect(shp)
+plot(shp)
+```
+
+
+
+## Import LANDFIRE data using the rlandfire package
+
+```{r}
+## get LANDFIRE data: bps, 2020 scls and 2022 scls ----
+
+
+aoi <- getAOI(shp)
+
+products <-  c("200BPS", "230SCLASS", "230EVC", "230EVH", "230EVT")
+projection <- 5070
+resolution <- 30
+           
+           
+# R specific arguments
+save_file <- tempfile(fileext = ".zip")
+           
+#call API
+ncal <- landfireAPI(products, 
+                   aoi, 
+                   projection, 
+                   resolution, 
+                   path = save_file)
+
+# took just over 2 minutes
+
+# extract data to inputs folder and split rasters  ----
+
+# get location of downloaded file, then manually cut paste to inputs dir
+          # tempdir()
+```
+
+
+# Separate out rasters from the stack
+```{r}
+# process datasets ----
+
+stacked_rasters <- rast("inputs/stacked_raster.tif")
+
+# "split" downloaded raster into separate layers
+for(lyr in names(stacked_rasters)) assign(lyr, stacked_rasters[[lyr]])
+
+
+
+```
+
+## BpS
+<br>
+
+### Process spatial data
+
+
+
+```{r}
+
+bps_aoi <- US_200BPS %>%
+  crop(shp) %>%
+  mask(shp)
+
+plot(bps_aoi)
+
+
+bps_conus_atts <- read.csv("inputs/LF20_BPS_220.csv")
+
+# bps_aoi <-  bps_conus_r %>%
+#   crop(shp) %>%
+#   mask(shp)
+
+levels(bps_aoi)[[1]] <- bps_conus_atts
+activeCat(bps_aoi) <- "VALUE"
+
+
+bps_aoi_atts <- values(bps_aoi, dataframe = T, na.rm = T) %>%
+  table(dnn = "VALUE") %>%
+  as.data.frame() %>%
+  mutate_all(as.character) %>%
+  mutate_all(as.integer) %>%
+  left_join(cats(bps_aoi)[[1]], by = "VALUE") %>%
+  filter(Freq != 0) %>%
+  mutate(ACRES = round((Freq * 900 / 4046.86), 0),
+   REL_PERCENT = round((Freq / sum(Freq)), 3) * 100) %>%
+  arrange(desc(REL_PERCENT))
+
+
+writeRaster(bps_aoi, "outputs/bps_aoi.tif",
+          gdal = c("COMPRESS=NONE", "TFW=YES"),
+          datatype = "INT2S",
+          overwrite = T)
+
+write.dbf(bps_aoi_atts, "outputs/bps_aoi.tif.vat.dbf")
+
+## write csv for fun
+write.csv(bps_aoi_atts, "outputs/bps_aoi_attributes.csv")
+
+## for charts and map legend 
+
+bps_aoi_atts  <- read_csv("outputs/bps_aoi_attributes.csv")
+    
+bpsname10 <- bps_aoi_atts %>%
+  group_by(BPS_NAME) %>%
+  summarize(ACRES = sum(ACRES),
+            REL_PERCENT = sum(REL_PERCENT)) %>%
+  arrange(desc(REL_PERCENT)) %>%
+  subset(BPS_NAME != "Open Water" & BPS_NAME != "Barren-Rock/Sand/Clay") %>%
+  distinct(BPS_NAME, .keep_all = TRUE) %>%
+  top_n(n = 10, wt = REL_PERCENT) 
+    
+    
+   
+## BpS color file for use in QGIS
+###### old way, need to rework BpS color file to get top 10 after summarizing #####
+# BpSColorFile <- bps_aoi_atts %>%
+#   subset(BPS_NAME != "Open Water" & BPS_NAME != "Barren-Rock/Sand/Clay") %>%
+#   distinct(BPS_NAME, .keep_all = TRUE) %>%
+#   top_n(n = 10, wt = REL_PERCENT) %>%
+#       add_column(z = 255) %>%
+#       dplyr::select(
+#              VALUE,
+#              #REL_PERCENT,
+#              R,
+#              G,
+#              B,
+#              z,
+#              BPS_NAME)
+
+## try new color file
+ summary_bps_name <- bps_aoi_atts %>%
+   subset(BPS_NAME != "Open Water" & BPS_NAME != "Barren-Rock/Sand/Clay") %>%
+   group_by(BPS_NAME) %>%
+   summarise(bps_name_totals = sum(REL_PERCENT)) %>%
+   ungroup()
+
+## if using top 10
+ # top_groups <- summary_bps_name %>%
+ #   top_n(10, wt = bps_name_totals)
+
+## if using BpSs with amounts > certain percent
+
+top_groups <- summary_bps_name %>%
+  filter(bps_name_totals >= 1)
+
+ filtered_bps_name_groups <- bps_aoi_atts %>%
+   filter(BPS_NAME %in% top_groups$BPS_NAME)
+ 
+
+
+
+ BpSColorFile <- filtered_bps_name_groups %>%
+       add_column(z = 255) %>%
+       dplyr::select(
+              VALUE,
+              R,
+              G,
+              B,
+              z,
+              BPS_NAME)  %>%
+       arrange(BPS_NAME) 
+ 
+  geographies <- c(
+                "Boreal ",
+                "Central Interior and Appalachian ",
+                "Great Lakes ",
+                "Laurentian ",
+                "Laurentian-Acadian ",
+                "North-Central Interior ")
+
+BpSColorFile$BPS_NAME <- gsub(paste(geographies, collapse = "|"), "", BpSColorFile$BPS_NAME)
+ 
+# 
+write.table(BpSColorFile, file = "outputs/BpSColorFile.txt", sep = ",",
+                row.names = FALSE, col.names = FALSE, quote = FALSE)
+
+# use generic!
+# all_fri_color_file <- bps_aoi_atts %>%
+#   arrange(desc(FRI_ALLFIR)) %>%
+#       add_column(z = 255) %>%
+#       dplyr::select(VALUE,
+#              R,
+#              G,
+#              B,
+#              z,
+#              FRI_ALLFIR)
+
+#write.table(all_fri_color_file, file = "outputs/all_fri_color_file.txt", sep = ",",
+                #row.names = FALSE, col.names = FALSE, quote = FALSE)
+  
+  
+
+
+
+
+```
+
+
+<br>
+
+### Make a chart of BpS data
+
+
+```{r}
+
+bpsname10 <- bps_aoi_atts %>%
+  group_by(BPS_NAME) %>%
+  summarize(ACRES = sum(ACRES),
+            REL_PERCENT = sum(REL_PERCENT)) %>%
+  arrange(desc(REL_PERCENT)) %>%
+  top_n(n = 10, wt = REL_PERCENT)
+
+# plot
+bps_chart <- 
+  ggplot(data = bpsname10, aes(x = BPS_NAME, y = REL_PERCENT)) +
+  geom_bar(stat = "identity", fill = "#4a4a48") +
+  coord_flip() +
+  scale_x_discrete(limits = rev(bpsname10$BPS_NAME)) +
+  theme_bw(base_size = 14) +
+  labs(
+    title = "Top 10 Biophysical Settings",
+    subtitle = landscape_name,
+    x = "",
+    y = "Percent",
+    caption = "Represents dominant vegetation systems pre-European colonization. \n Based on LANDFIRE's Biophysical Settings.  Data available at https://www.landfire.gov/viewer. Randy Swaty, Ecologist, rswaty@tnc.org") +
+  theme(plot.title.position = "plot", #NEW parameter. Apply for subtitle too.
+        plot.caption.position =  "plot",
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_blank())
+  
+
+bps_chart
+
+# if the plot looks good, save it
+ggsave("outputs/bpsChart.png", width = 12, height = 5)
+
+
+```
+
+###  Annual disturbances per BpS
+
+##  SOMETHING IS WRONG WITH THIS-DOUBLE CHECK MATH AND CODE
+
+```{r}
+bps_disturbances <- read.csv("D:/landfire_R_experiment/conus_inputs/bps_transitions.csv")
+
+bps_aoi_disturbances <- left_join(bps_disturbances, bps_aoi_atts, 
+                                  by = c("Model_Code" = "BPS_MODEL")) %>%
+                                  drop_na(VALUE) %>%
+                        mutate(annual_dist_acres = annual_probability*ACRES) %>%
+                        select(-c(3, 7:25))
+
+write.csv(bps_aoi_disturbances, "outputs/bps_aoi_disturbances.csv")
+
+
+```
+
+
+
+## EVT
+
+### Process spatial data
+
+```{r}
+
+
+evt_aoi <- US_230EVT %>%
+  crop(shp) %>%
+  mask(shp)
+
+
+evt_conus_atts <- read.csv("inputs/LF22_EVT_230.csv")
+
+
+levels(evt_aoi)[[1]] <- evt_conus_atts
+activeCat(evt_aoi) <- "VALUE"
+
+
+evt_aoi_atts <- values(evt_aoi, dataframe = T, na.rm = T) %>%
+  table(dnn = "VALUE") %>%
+  as.data.frame() %>%
+  mutate_all(as.character) %>%
+  mutate_all(as.integer) %>%
+  left_join(cats(evt_aoi)[[1]], by = "VALUE") %>%
+  filter(Freq != 0) %>%
+  mutate(ACRES = round((Freq * 900 / 4046.86), 0),
+   REL_PERCENT = round((Freq / sum(Freq)), 3) * 100) 
+
+
+writeRaster(evt_aoi, "outputs/evt_aoi.tif",
+          gdal = c("COMPRESS=NONE", "TFW=YES"),
+          datatype = "INT2S",
+          overwrite = TRUE)
+write.dbf(evt_aoi_atts, "outputs/evt_aoi.tif.vat.dbf")
+
+## write csv for fun
+write.csv(evt_aoi_atts, "outputs/evt_aoi_attributes.csv")
+
+    
+##  color file for use in QGIS    
+ EVTColorFile <- evt_aoi_atts %>%
+  subset(EVT_NAME != "Open Water" & EVT_NAME != "Barren-Rock/Sand/Clay") %>%
+  top_n(n = 10, wt = REL_PERCENT) %>%
+      add_column(z = 255) %>%
+      dplyr::select(VALUE,
+             R,
+             G,
+             B,
+             z,
+             EVT_NAME)
+ 
+ 
+write.table(EVTColorFile, file = "outputs/EVTColorFile.txt", sep = ",",
+                row.names = FALSE, col.names = FALSE, quote = FALSE)   
+    
+
+
+
+
+```
+
+### Make a chart of EVT data
+
+```{r}
+
+evt_aoi_atts <- read.csv("outputs/evt_aoi_attributes.csv")
+
+evtname10 <- evt_aoi_atts %>%
+  group_by(EVT_NAME) %>%
+  summarize(ACRES = sum(ACRES),
+            REL_PERCENT = sum(REL_PERCENT)) %>%
+  arrange(desc(REL_PERCENT)) %>%
+  top_n(n = 10, wt = REL_PERCENT)
+
+# plot
+evt_chart <- 
+  ggplot(data = evtname10, aes(x = EVT_NAME, y = REL_PERCENT)) +
+  geom_bar(stat = "identity", fill = "#5c5163") +
+  coord_flip() +
+  scale_x_discrete(limits = rev(evtname10$EVT_NAME)) +
+  theme_bw() +
+  labs(
+    title = "Top 10 Existing Vegetation Types",
+    subtitle = landscape_name,
+    x = "",
+    y = "Percent",
+    caption = "Represents dominant vegetation systems as of 2020. \n Based on LANDFIRE's Existing Vegetation Type data.  Data available at https://www.landfire.gov/viewer. Randy Swaty, Ecologist, rswaty@tnc.org") +
+  theme(plot.title.position = "plot", #NEW parameter. Apply for subtitle too.
+        plot.caption.position =  "plot",
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_blank())
+  
+
+evt_chart
+
+ggsave("outputs/evtChart.png", width = 12, height = 5)
+```
+
+
+## EVC
+
+### Process spatial data
+
+
+```{r}
+evc_aoi <- US_230EVC  %>%
+  crop(shp) %>%
+  mask(shp)
+
+
+evc_conus_atts <- read.csv("inputs/LF22_EVC_230_acc.csv")
+
+
+levels(evc_aoi)[[1]] <- evc_conus_atts
+activeCat(evc_aoi) <- "Value"
+
+
+evc_aoi_atts <- values(evc_aoi, dataframe = T, na.rm = T) %>%
+  table(dnn = "Value") %>%
+  as.data.frame() %>%
+  mutate_all(as.character) %>%
+  mutate_all(as.integer) %>%
+  left_join(cats(evc_aoi)[[1]], by = "Value") %>%
+  filter(Freq != 0) %>%
+  mutate(ACRES = round((Freq * 900 / 4046.86), 0),
+   REL_PERCENT = round((Freq / sum(Freq)), 3) * 100) 
+
+
+writeRaster(evc_aoi, "outputs/evc_aoi2.tif",
+          gdal = c("COMPRESS=NONE", "TFW=YES"),
+          datatype = "INT2S",
+          overwrite = T)
+
+
+write.dbf(evc_aoi_atts, "outputs/evc_aoi.tif.vat.dbf")
+
+## EVC color file for use in QGIS
+EVCColorFile <- evc_aoi_atts    %>%
+      add_column(z = 255)     %>%
+      dplyr::select(Value,
+                    R,
+                    G,
+                    B,
+                    z,
+                    CLASSNAMES) 
+    
+    
+write.table(EVCColorFile, file = "outputs/EVCColorFile.txt", sep = ",",
+                row.names = FALSE, col.names = FALSE, quote = FALSE)
+
+## write csv for fun
+write.csv(evc_aoi_atts, "outputs/evc_aoi_attributes.csv")
+```
+
+
+### Make a chart from EVC data
+
+```{r}
+# create "type" column based on conditions
+evcname <- evc_aoi_atts %>% 
+  mutate(type = if_else(Value %in% 11, "Open Water",
+                                             if_else(Value %in% 12, "Snow / Ice",
+                                                     if_else(Value %in% c(13:25), "Developed",
+                                                             if_else(Value %in% 31, "Barren",
+                                                                     if_else(Value %in% c(60:70), "Agriculture",
+                                                                             if_else(Value %in% 32, "Quarries",
+                                                                                     if_else(Value %in% 100, "Sparse Vegetation",
+                                                                                             if_else(Value %in% c(101:199), "Tree",
+                                                                                                     if_else(Value %in% c(201:299), "Shrub",
+                                                                                                             if_else(Value %in% c(301:399), "Herb",
+                                                                                                                     "Other")))))))))))
+
+
+
+# create reverse substr() function
+revSubstr <- function(x, start, stop) {
+  x <- strsplit(x, "")
+  sapply(x, 
+         function(x) paste(rev(rev(x)[start:stop]), collapse = ""), 
+         USE.NAMES = FALSE)  }
+
+# create cover column based on 2nd and 3rd to last Values of classname
+# if "Other" type, make 0
+evcname <- evcname %>% mutate(cover = as.numeric(if_else(Value > 100,
+                                                         revSubstr(evcname$CLASSNAMES, start = 2, stop = 3),
+                                                         "0")))
+
+# create bin breaks for grouping
+breaks <- seq(0, 100, 10)
+# create intervals for grouping and summarize
+# also create factor order for "type"
+evcgroup <- evcname %>%
+  mutate(interval = cut(cover,
+                        breaks, 
+                        include.lowest = TRUE, 
+                        right = T,
+                        labels = c("0-9", "10-19", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", 
+                                   "80-89", "90-100")),
+         type = factor(type, levels = c("Tree", "Shrub", "Herb", "Open Water", "Snow / Ice", "Developed", "Agriculture", "Sparse Vegetation", "Barren", "Quarries", "Other"))) %>%
+  group_by(type, interval) %>%
+  summarize(COUNT = sum(Freq),
+            acres = sum(ACRES),
+            rel_percent = sum(REL_PERCENT))
+
+# add label and legend names based on condition
+evcgroup <- evcgroup %>% mutate(label = if_else(type %in% c("Tree", "Shrub", "Herb"),
+                                                paste0(type, " Cover = ", interval, "%"), as.character(type)),
+                                legend = if_else(type %in% c("Tree", "Shrub", "Herb", "Open Water"),
+                                                 type, as.factor("Other")))
+
+# turn current label order to factors
+evclabel.list <- evcgroup$label
+evcgroup <- evcgroup %>% mutate(label = fct_rev(factor(label, evclabel.list)))
+
+# join in custom cols column to color bars by specific label
+
+evc_group_cols <- read.csv("inputs/evc_group_acc.csv")
+
+evcgroup <- left_join(evcgroup, evc_group_cols, by = "label")
+
+evcgroup$label <- factor(evcgroup$label, levels = rev(evcgroup$label))
+
+evcgroup <- evcgroup %>%
+  filter(rel_percent > 0.01)
+
+# plot
+evcChart <-
+  ggplot(data = evcgroup, aes(x = label, y = rel_percent, fill = colors)) +
+  geom_bar(stat = "identity") +
+  labs(
+    title = "Existing Vegetation Cover",
+    caption = "Data from landfire.gov",
+    x = "Amount of landscape",
+    y = "Most dominant lifeform") +
+  scale_fill_identity() +
+  coord_flip() +
+  theme_classic(base_size = 12)+
+  theme(legend.position = "none") 
+
+
+evcChart
+
+# save the plot
+ggsave("outputs/evcclass_barplot.png", width = 12, height = 9)
+```
+
+## EVH
+
+### Process spatial data
+
+```{r}
+evh_aoi <- US_230EVH %>%
+  crop(shp) %>%
+  mask(shp)
+
+
+evh_conus_atts <- read.csv("inputs/LF22_EVH_230_acc.csv")
+
+
+levels(evh_aoi)[[1]] <- evh_conus_atts
+activeCat(evh_aoi) <- "Value"
+
+
+evh_aoi_atts <- values(evh_aoi, dataframe = T, na.rm = T) %>%
+  table(dnn = "Value") %>%
+  as.data.frame() %>%
+  mutate_all(as.character) %>%
+  mutate_all(as.integer) %>%
+  left_join(cats(evh_aoi)[[1]], by = "Value") %>%
+  filter(Freq != 0) %>%
+  mutate(ACRES = round((Freq * 900 / 4046.86), 0),
+   REL_PERCENT = round((Freq / sum(Freq)), 3) * 100) 
+
+
+writeRaster(evh_aoi, "outputs/evh_aoi.tif",
+          gdal = c("COMPRESS=NONE", "TFW=YES"),
+          datatype = "INT2S",
+          overwrite = T)
+
+
+write.dbf(evh_aoi_atts, "outputs/evh_aoi.tif.vat.dbf")
+
+write.csv(evh_aoi_atts, "outputs/evh_aoi_attributes.csv")
+
+EVHColorFile <- evh_aoi_atts    %>%
+      add_column(z = 255)     %>%
+      dplyr::select(Value,
+                    R,
+                    G,
+                    B,
+                    z,
+                    CLASSNAMES) 
+    
+    
+write.table(EVHColorFile, file = "outputs/EVHColorFile.txt", sep = ",",
+                row.names = FALSE, col.names = FALSE, quote = FALSE)
+
+```
+
+
+### Make a chart from EVH data
+
+```{r}
+
+evhname <- evh_aoi_atts %>% 
+  mutate(type = if_else(Value %in% 11, "Open Water",
+                                             if_else(Value %in% 12, "Snow / Ice",
+                                                     if_else(Value %in% c(13:25), "Developed",
+                                                             if_else(Value %in% 31, "Barren",
+                                                                     if_else(Value %in% c(60:70), "Agriculture",
+                                                                             if_else(Value %in% 32, "Quarries",
+                                                                                     if_else(Value %in% 100, "Sparse Vegetation",
+                                                                                             if_else(Value %in% c(101:199), "Tree",
+                                                                                                     if_else(Value %in% c(201:299), "Shrub",
+                                                                                                             if_else(Value %in% c(301:399), "Herb",
+                                                                                                                     "Other"))))))))))) %>%
+  mutate(height_m = if_else(type %in% "Tree", (Value -100),
+                            if_else(type %in% "Shrub", ((Value - 200) / 10),
+                                    if_else(type %in% "Herb", ((Value - 300) / 10), 0))) %>%
+           as.character() %>% as.numeric())
+
+# create bin breaks for grouping
+breaks <- c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100)
+
+# create intervals for grouping and summarize
+# also create factor order for "type"
+evhgroup <- evhname %>%
+  mutate(interval = cut(height_m,
+                        breaks, 
+                        include.lowest = TRUE, 
+                        right = F,
+                        labels = c("0", "0.1-0.2", "0.2-0.3", "0.3-0.4" ,"0.4-0.5", "0.5-0.6", "0.6-0.7", "0.7-0.8", "0.8-0.9", "0.9-1.0", "1-5", "5-10", "10-15", "15-20", "20-25", "25-30", "30-35", "35-40", "40-45", "45-50", "50-55", "55-60", "60-65", "65-70", "70-75", "75-80", "80-85", "85-90", "90-95", "95-100")),
+         type = factor(type, levels = c("Tree", "Shrub", "Herb", "Open Water", "Snow / Ice", "Developed", "Agriculture", "Sparse Vegetation", "Barren", "Quarries", "Other"))) %>%
+  group_by(type, interval) %>%
+  summarise(COUNT = sum(Freq),
+            acres = sum(ACRES),
+            rel_percent = sum(REL_PERCENT))
+
+
+
+# add label and legend names based on condition
+evhgroup <- evhgroup %>% mutate(label = if_else(type %in% c("Tree", "Shrub", "Herb"),
+                                                paste0(type, " Height = ", interval, " m"), as.character(type)),
+                                legend = if_else(type %in% c("Tree", "Shrub", "Herb", "Open Water"),
+                                                 type, as.factor("Other")))
+# turn current label order to factors
+evhlabel.list <- evhgroup$label
+evhgroup <- evhgroup %>% mutate(label = fct_rev(factor(label, evhlabel.list)))
+
+
+# join in custom cols column to color bars by specific label
+
+evh_group_cols <- read.csv("inputs/evh_group_acc.csv")
+
+evhgroup <- left_join(evhgroup, evh_group_cols, by = "label")
+
+evhgroup$label <- factor(evhgroup$label, levels = rev(evhgroup$label))
+
+evhgroup <- evhgroup %>%
+  filter(rel_percent > 0.01)
+
+
+evcChart <-
+  ggplot(data = evcgroup, aes(x = label, y = rel_percent, fill = colors)) +
+  geom_bar(stat = "identity") +
+  labs(
+    title = "Existing Vegetation Cover",
+    caption = "Data from landfire.gov",
+    x = "Amount of landscape",
+    y = "Most dominant lifeform") +
+  scale_fill_identity() +
+  coord_flip() +
+  theme_classic(base_size = 12)+
+  theme(legend.position = "none") 
+
+
+
+# plot
+evhChart <-
+ggplot(data = evhgroup, aes(x = label, y = rel_percent, fill = colors)) +
+  geom_bar(stat = "identity") +
+  labs(
+    title = "Existing Vegetation Height",
+    subtitle = landscape_name,
+    caption = "\nData from landfire.gov.",
+    x = "",
+    y = "Percent of landscape") +
+  scale_fill_identity() +
+  coord_flip() +
+  theme_bw()
+
+evhChart
+
+# save plot
+ggsave("outputs/evhclass_barplot.png", width = 12, height = 9)
+
+
+```
+
+## S-Class Raster work, write attributes
+
+
+```{r sclass spatial, message=FALSE, warning=FALSE, include=FALSE}
+# SCLASS
+
+scls_aoi <-  US_230SCLASS %>%
+  crop(shp) %>%
+  mask(shp)
+
+
+scls_conus_atts <- read.csv("inputs/LF22_SCla_230.csv")
+
+# scls_aoi <-  scls_conus_r %>%
+#   crop(shp) %>%
+#   mask(shp)
+
+levels(scls_aoi)[[1]] <- scls_conus_atts
+activeCat(scls_aoi) <- "VALUE"
+
+
+scls_aoi_atts <- values(scls_aoi, dataframe = T, na.rm = T) %>%
+  table(dnn = "VALUE") %>%
+  as.data.frame() %>%
+  mutate_all(as.character) %>%
+  mutate_all(as.integer) %>%
+  left_join(cats(scls_aoi)[[1]], by = "VALUE") %>%
+  filter(Freq != 0) %>%
+  mutate(ACRES = round((Freq * 900 / 4046.86), 0),
+   REL_PERCENT = round((Freq / sum(Freq)), 3) * 100) 
+
+
+writeRaster(scls_aoi, "outputs/scls_aoi.tif",
+          gdal = c("COMPRESS=NONE", "TFW=YES"),
+          datatype = "INT2S",
+          overwrite = T)
+write.dbf(scls_aoi_atts, "outputs/scls_aoi.tif.vat.dbf")
+
+write.csv(scls_aoi_atts, "outputs/scls_aoi_attributes.csv")
+
+```
+
+
+## Combine BpS and Sclass
+
+```{r sclass data, message=FALSE, warning=FALSE}
+## read in rasters if needed
+#bps_aoi <- raster("outputs/bps_aoi.tif")
+#scls_aoi <- raster("outputs/scls_aoi.tif")
+
+#bps_aoi_atts <- read.csv("outputs/bps_aoi_attributes.csv")
+#scls_aoi_atts <- read.csv("outputs/scls_aoi_attributes.csv")
+#bps_conus_atts <- read.csv("inputs/LF2016_BPS_200_CONUS/CSV_Data/LF16_BPS_200.csv")
+
+
+  # read in and format refcon
+## note: in modified ref con extra columns were deleted, NAs replaced by zeros and non reference sclass columns added
+ref_con <- read_csv("inputs/ref_con_long.csv")
+bps_names <- read_csv("inputs/bps_model_number_name.csv")
+
+# pivot long
+
+
+# ref_con <- ref_con_modified %>%
+#   pivot_longer(!Model_Code, names_to = "refLabel", values_to = "refPercent") %>%
+#   unite(model_label, c("Model_Code", "refLabel"), remove = FALSE) %>%
+#   left_join(bps_names)
+
+# get list of aoi BpS model numbers
+
+aoi_bps_models <- bps_aoi_atts$BPS_MODEL
+
+#subset ref_con to aoi
+aoi_ref_con <- subset(ref_con, model_code %in% aoi_bps_models)
+
+
+# get current conditions
+df<-data.frame('bps_aoi'=as.factor(as.matrix(bps_aoi)), 
+               'scls_aoi'=as.factor(as.matrix(scls_aoi)))
+#####  compare number of rows to total count of landscape
+
+
+# calculate table
+table(df$bps_aoi, df$scls_aoi)
+
+cmbn <- subset(as.data.frame(table(bps_aoi[],scls_aoi[])), Freq != 0)
+
+
+
+cmbn$Var2 <- unfactor(cmbn$Var2)
+cmbn$Var1 <- unfactor(cmbn$Var1)
+
+#bring in s-class labels
+cmbn <- left_join(cmbn, 
+                  scls_aoi_atts %>%
+                    dplyr::select(1, 3),
+                  by = c("Var2" = "VALUE"))
+
+#bring in bps labels
+cmbn2 <- left_join(cmbn, 
+                  bps_conus_atts %>%
+                    dplyr::select(1:4),
+                  by = c("Var1" = "VALUE"))
+
+# calculate current sclass percents
+cmbn2 <- cmbn2 %>%
+  group_by(Var1, BPS_MODEL) %>%
+  mutate(total_count = sum(Freq))%>%
+  mutate(currentPercent = as.integer((Freq/total_count)*100)) %>%
+  unite(model_label, c("BPS_MODEL", "LABEL"))
+  
+
+# historic and current sclass amounts together  NEED TO HAVE ALL SCLASS COMBOS
+BPS_SCLS <- dplyr::left_join(cmbn2,
+                                 ref_con,
+                                 by = "model_label")
+# BPS_SCL misses combos where there is a current sclass missing
+
+BPS_SCLS2 <- dplyr::left_join(aoi_ref_con,
+                              cmbn2,
+                              by = "model_label")
+
+
+
+write.csv(BPS_SCLS2, file = "outputs/bpsScls2.csv")
+
+
+```
+
+
+##Sclass demo chart
+
+```{r eval=FALSE, include=FALSE}
+
+
+## wrangle data, get top 3 groups (BpSs)
+
+top <- 3
+
+bps_scls_3 <- BPS_SCLS2 %>%
+  group_by(Var1) %>%
+  mutate(total.count = sum(Freq)) %>%
+  ungroup() %>%
+  dplyr::filter(dense_rank(desc(total.count)) < 4) %>%
+  dplyr::select(c("bps_name", "ref_label",  "currentPercent", "ref_percent")) %>%
+  pivot_longer(
+    cols = c(`ref_percent`, `currentPercent`), 
+    names_to = "refCur", 
+    values_to = "Percent"
+    )
+
+
+
+
+# order classes
+bps_scls_3$ref_label <- factor(bps_scls_3$ref_label, levels= c(
+  "Developed",
+  "Agriculture",
+  "UE",
+  "UN",
+  "E",
+  "D",
+  "C",
+  "B",
+  "A"))
+
+
+
+
+sclasplot <-
+  ggplot(bps_scls_3, aes(fill=factor(refCur), y=Percent, x=ref_label)) + 
+  geom_col(width = 0.8, position = position_dodge()) +
+  coord_flip() +
+  facet_grid(. ~BpS) +
+  scale_x_discrete(limits = (levels(bps_scls_3$ref_label))) +
+  labs(
+    title = "Succession Classes past and present",
+    subtitle = "6 BpSs selected for illustration. Not all succession classes present in all BpSs",
+    caption = "\nData from landfire.gov.",
+    x = "",
+    y = "Percent")+
+  theme_minimal(base_size = 12)+
+  theme(plot.caption = element_text(hjust = 0, face= "italic"), #Default is hjust=1
+        plot.title.position = "plot", #NEW parameter. Apply for subtitle too.
+        plot.caption.position =  "plot") +
+  scale_fill_manual(values = c("#3d4740", "#32a852" ), # present (grey), historical (green)
+                    name = " ", 
+                    labels = c("Present",
+                               "Past")) +
+  facet_wrap(~bps_name, nrow(3),labeller = labeller(BpS_Name = label_wrap_gen())) +
+    theme(panel.spacing = unit(.05, "lines"),
+        panel.border = element_rect(color = "black", fill = NA, size = 1), 
+        strip.background = element_rect(color = "black", size = 1))
+
+sclasplot
+
+ggsave("outputs/sclass_barplot.png", width = 12, height = 9)
+
+
+```
+
+
+## BpS to EVT-GROUPED
+```{r}
+# read bps and evt rasters
+bps_r <- raster("outputs/bps_aoi.tif")
+evt_r <- raster("outputs/evt_aoi.tif")
+
+# edit the tables a little bit, mainly names
+bps_att <- read.csv(file = "outputs/bps_aoi_attributes.csv") %>%
+  dplyr::select(VALUE, GROUPVEG, ACRES) %>%
+  rename(BPS_ID = VALUE, bps_acres = ACRES) %>%
+  mutate(GROUPVEG = paste("BPS ", GROUPVEG))
+
+evt_att <- read.csv(file = "outputs/evt_aoi_attributes.csv") %>%
+  dplyr::select(VALUE, EVT_PHYS, ACRES) %>%
+  rename(EVT_ID = VALUE, evt_acres = ACRES) %>%
+  mutate(EVT_PHYS = paste("EVT ", EVT_PHYS))
+
+# combine rasters
+bps2evt <- stack(bps_r, evt_r) %>%
+  getValues() %>%
+  as.data.frame() %>%
+  plyr::count() %>%
+  rename(BPS_ID = BPS_MODEL, EVT_ID = EVT_NAME) %>%
+  mutate(acres = round((freq * 900 / 4046.8564224))) %>%
+  left_join(bps_att) %>%
+  left_join(evt_att) %>%
+  drop_na()
+
+
+write.csv(bps2evt, "outputs/bps2evt.csv")
+
+```
+
+
+## BpS to EVT-not grouped
+```{r eval=FALSE, include=FALSE}
+# read bps and evt rasters
+bps_r <- raster("outputs/bps_aoi.tif")
+evt_r <- raster("outputs/evt_aoi.tif")
+
+# edit the tables a little bit, mainly names
+bps_att <- read.csv(file = "outputs/bps_aoi_attributes.csv") %>%
+  dplyr::select(VALUE, BPS_NAME, ACRES) %>%
+  rename(BPS_ID = VALUE, bps_acres = ACRES) %>%
+  mutate(BPS_NAME = paste("BPS ", BPS_NAME))
+
+evt_att <- read.csv(file = "outputs/evt_aoi_attributes.csv") %>%
+  dplyr::select(VALUE, EVT_NAME, ACRES) %>%
+  rename(EVT_ID = VALUE, evt_acres = ACRES) %>%
+  mutate(EVT_NAME = paste("EVT ", EVT_NAME))
+
+# combine rasters
+bps2evt <- stack(bps_r, evt_r) %>%
+  getValues() %>%
+  as.data.frame() %>%
+  plyr::count() %>%
+  rename(BPS_ID = BPS_MODEL, EVT_ID = EVT_NAME) %>%
+  mutate(acres = round((freq * 900 / 4046.8564224))) %>%
+  left_join(bps_att) %>%
+  left_join(evt_att) %>%
+  drop_na()
+
+
+write.csv(bps2evt, "outputs/bps2evt-NAMES.csv")
+
+```
+
+
+
+## Try LF HistDist
+
+```{r}
+
+hist_dist_aoi <- rast("D:/landfire_R_experiment/conus_inputs/LF2023_HDist_240_CONUS/Tif/LC23_HDst_240.tif") %>%
+  crop(shp) %>%
+  mask(shp)
+
+plot(hist_dist_aoi)
+
+
+hist_dist_conus_atts <- read.csv("D:/landfire_R_experiment/conus_inputs/LF2023_HDist_240_CONUS/CSV_Data/LF23_HDst_240.csv") %>%
+   mutate(Dist_Year = paste(DIST_TYPE, HDIST_YR, sep = "_"))
+
+levels(hist_dist_aoi)[[1]] <- hist_dist_conus_atts
+activeCat(hist_dist_aoi) <- "VALUE"
+
+
+hist_dist_atts <- values(hist_dist_aoi, dataframe = T, na.rm = T) %>%
+  table(dnn = "VALUE") %>%
+  as.data.frame() %>%
+  mutate_all(as.character) %>%
+  mutate_all(as.integer) %>%
+  left_join(cats(hist_dist_aoi)[[1]], by = "VALUE") %>%
+  filter(Freq != 0) %>%
+  mutate(ACRES = round((Freq * 900 / 4046.86), 0),
+   REL_PERCENT = round((Freq / sum(Freq)), 3) * 100) %>%
+  arrange(desc(REL_PERCENT))
+
+
+## reclassify based on Dist_Year field and values
+
+# Create a mapping between Dist_Year values and numeric codes
+unique_dist_years <- unique(hist_dist_atts$Dist_Year)
+
+dist_year_mapping <- data.frame(
+  Code = seq_along(unique_dist_years),
+  Dist_Year = unique_dist_years) %>%
+  separate(Dist_Year, into = c("Disturbance", "Year"),
+           sep = "_",
+           remove = FALSE)
+
+# Merge the mapping with the original data
+hist_dist_atts <- hist_dist_atts %>%
+  left_join(dist_year_mapping, by = "Dist_Year") %>%
+  dplyr::mutate(
+    VALUE = as.numeric(VALUE)
+  )
+
+# Create the reclassification matrix using the numeric codes
+reclass_matrix <- hist_dist_atts %>%
+  dplyr::select(VALUE, Code) %>%
+  data.matrix()
+
+# Print the reclassification matrix to verify
+print(reclass_matrix)
+
+# Reclassify the raster using the numeric codes
+reclassified_raster <- classify(hist_dist_aoi, reclass_matrix)
+
+dist_year_mapping <- dist_year_mapping %>%
+  rename(VALUE = Code)
+
+levels(reclassified_raster)[[1]] <- dist_year_mapping
+activeCat(reclassified_raster) <- "VALUE"
+
+
+reclass_hdist_atts <- values(reclassified_raster, dataframe = T, na.rm = T) %>%
+  table(dnn = "VALUE") %>%
+  as.data.frame() %>%
+  mutate_all(as.character) %>%
+  mutate_all(as.integer) %>%
+  left_join(cats(reclassified_raster)[[1]], by = "VALUE") %>%
+  filter(Freq != 0) %>%
+  mutate(ACRES = round((Freq * 900 / 4046.86), 0),
+   REL_PERCENT = round((Freq / sum(Freq)), 3) * 100) %>%
+  arrange(desc(REL_PERCENT)) %>%
+  separate(Dist_Year, into = c("Disturbance", "Year"),
+           sep = "_",
+           remove = FALSE)
+
+
+
+writeRaster(reclassified_raster, "outputs/reclassified_hdist_aoi.tif",
+          gdal = c("COMPRESS=NONE", "TFW=YES"),
+          datatype = "INT2S",
+          overwrite = T)
+
+row.names(reclass_hdist_atts) <- NULL
+
+write.dbf(reclass_hdist_atts, 
+            "outputs/reclassified_hdist_aoi.tif.vat.dbf"
+              )
+
+## write csv for fun
+write.csv(reclass_hdist_atts, 
+          "outputs/reclass_hdist_atts.csv",
+          row.names = FALSE)
+
+reclass_dbf <- read.dbf("outputs/reclass_hdist_atts.tif.vat.dbf")
+
+
+```
+
+# Try faceted chart of disturbance
+
+```{r}
+# plot
+reclass_hdist_atts <- reclass_hdist_atts %>%
+  filter(Disturbance != 'Non Disturbed') 
+
+reclass_hdist_atts$Year <- as.numeric(as.character(reclass_hdist_atts$Year))
+
+
+dist_chart <- 
+  ggplot(data = reclass_hdist_atts, aes(x = Year, y = ACRES, group = 1)) +
+  geom_line(color = 'black', linewidth = 1) +
+  theme_bw(base_size = 14) +
+  labs(
+    x = "Year",
+    y = "Acres",
+    caption = "From LANDFIRE Annual Disturbance data.  Data available at https://www.landfire.gov/viewer. Randy Swaty, Ecologist, rswaty@tnc.org") +
+  theme(plot.title.position = "plot", #NEW parameter. Apply for subtitle too.
+        plot.caption.position =  "plot",
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_blank()) +
+  facet_wrap(~Disturbance, scales = 'free_y') +
+  scale_x_continuous(breaks = c(2014, 2016, 2018, 2020, 2022)) +
+  scale_y_continuous(labels = comma_format(accuracy = 1)) 
+
+dist_chart
+```
+
+
