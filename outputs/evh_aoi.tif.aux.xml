@@ -1,6 +1,16 @@
 <PAMDataset>
   <PAMRasterBand band="1">
     <Description>Value</Description>
+    <Histograms>
+      <HistItem>
+        <HistMin>10.50166666666667</HistMin>
+        <HistMax>310.4983333333333</HistMax>
+        <BucketCount>300</BucketCount>
+        <IncludeOutOfRange>0</IncludeOutOfRange>
+        <Approximate>0</Approximate>
+        <HistCounts>840|0|471|51|156|38|5|0|0|0|0|21|10|2|552|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|1|20|34|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|24|22|21|36|55|87|144|345|543|1149|2696|5287|8082|9322|9284|9070|9148|9361|9382|9025|8018|6214|4500|3136|752|268|46|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|1|2|1|1|1|0|0|1|17|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|261|0|67|0|0|0|0|0|0|110</HistCounts>
+      </HistItem>
+    </Histograms>
     <GDALRasterAttributeTable tableType="thematic">
       <FieldDefn index="0">
         <Name>Value</Name>
@@ -1192,5 +1202,12 @@
         <F>0.345098039</F>
       </Row>
     </GDALRasterAttributeTable>
+    <Metadata>
+      <MDI key="STATISTICS_MAXIMUM">310</MDI>
+      <MDI key="STATISTICS_MEAN">115.98500184026</MDI>
+      <MDI key="STATISTICS_MINIMUM">11</MDI>
+      <MDI key="STATISTICS_STDDEV">18.980783618932</MDI>
+      <MDI key="STATISTICS_VALID_PERCENT">42.92</MDI>
+    </Metadata>
   </PAMRasterBand>
 </PAMDataset>
