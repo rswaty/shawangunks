@@ -742,15 +742,21 @@ write.csv(scls_aoi_atts, "outputs/scls_aoi_attributes.csv")
 
 ```{r sclass data, message=FALSE, warning=FALSE}
 ## read in rasters if needed
-#bps_aoi <- raster("outputs/bps_aoi.tif")
-#scls_aoi <- raster("outputs/scls_aoi.tif")
-
-#bps_aoi_atts <- read.csv("outputs/bps_aoi_attributes.csv")
-#scls_aoi_atts <- read.csv("outputs/scls_aoi_attributes.csv")
-#bps_conus_atts <- read.csv("inputs/LF2016_BPS_200_CONUS/CSV_Data/LF16_BPS_200.csv")
+bps_aoi <- raster("outputs/bps_aoi.tif")
+scls_aoi <- raster("outputs/scls_aoi.tif")
 
 
-  # read in and format refcon
+
+bps_aoi_atts <- read_csv("outputs/bps_aoi_attributes.csv", 
+    col_types = cols(...1 = col_skip()))
+
+scls_aoi_atts <- read_csv("outputs/scls_aoi_attributes.csv", 
+    col_types = cols(...1 = col_skip()))
+
+bps_conus_atts <- read.csv("inputs/LF20_BPS_220.csv")
+
+
+# read in and format refcon
 ## note: in modified ref con extra columns were deleted, NAs replaced by zeros and non reference sclass columns added
 ref_con <- read_csv("inputs/ref_con_long.csv")
 bps_names <- read_csv("inputs/bps_model_number_name.csv")
@@ -790,7 +796,7 @@ cmbn$Var1 <- unfactor(cmbn$Var1)
 #bring in s-class labels
 cmbn <- left_join(cmbn, 
                   scls_aoi_atts %>%
-                    dplyr::select(1, 3),
+                  dplyr::select(1, 3),
                   by = c("Var2" = "VALUE"))
 
 #bring in bps labels
